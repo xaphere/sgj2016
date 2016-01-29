@@ -17,6 +17,9 @@ public class Mover : MonoBehaviour {
         Vector3 dir = new Vector3(x, 0.0f, z);
         Vector3 moveVec = dir * speed;
 
+        print(x);
+        print(z);
+
         Rigidbody rb = GetComponent<Rigidbody>();
         RaycastHit hitInfo;
         if (rb.SweepTest(dir, out hitInfo, moveVec.magnitude*2.0f))
