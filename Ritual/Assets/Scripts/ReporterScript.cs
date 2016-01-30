@@ -14,8 +14,6 @@ public class ReporterScript : MonoBehaviour {
 	void Start () {
 		audio = GetComponent<AudioSource> ();
 		uiCanvas = GameObject.FindWithTag ("UI/Canvas");
-		ReportText ();
-		Yell ();
 	}
 
 	void Yell() {
