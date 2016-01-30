@@ -10,6 +10,9 @@ public class ReporterScript : MonoBehaviour {
 	public GameObject textPrefab;
 	public string promptText;
 
+	public float triggerRate = 5.0f;
+	private float nextTrigger;
+
 	// Use this for initialization
 	void Start () {
 		audio = GetComponent<AudioSource> ();
@@ -21,6 +24,9 @@ public class ReporterScript : MonoBehaviour {
 	}
 
 	void ReportText() {
+		if (promptText.Equals (string.Empty)) {
+			return;
+		}
 		GameObject prompt = Instantiate (textPrefab);
 		prompt.transform.FindChild ("Text").GetComponent<Text> ().text = promptText;
 		prompt.transform.SetParent (uiCanvas.transform);
@@ -33,10 +39,13 @@ public class ReporterScript : MonoBehaviour {
 		prompt.SetActive (false);
 	}
 
-	void OnCollisionEnter(Collision other) {
+	void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.tag == "Player") {
-			ReportText ();
-			Yell ();
+			if (Time.time > nextTrigger) {
+				nextTrigger = Time.time + triggerRate;
+				ReportText ();
+				Yell ();
+			}
 		}
 	}
 	

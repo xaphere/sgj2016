@@ -3,6 +3,12 @@ using System.Collections;
 
 public class PlayerControl2D : MonoBehaviour {
 
+    public RuntimeAnimatorController runLeft;
+    public RuntimeAnimatorController runRight;
+    public RuntimeAnimatorController idleLeft;
+    public RuntimeAnimatorController idleRight;
+    private bool turnedLeft = false;  //0 is right, 1 is left.
+
 	// Use this for initialization
 	void Start () {
 	
@@ -136,6 +142,8 @@ public class PlayerControl2D : MonoBehaviour {
     void Update () {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
+        //print(x);
+        //print(y);
         if (x > 0.01f) x = 1.0f;
         if (x < -0.01f) x = -1.0f;
         if (y > 0.01f) y = 1.0f;
@@ -195,6 +203,41 @@ public class PlayerControl2D : MonoBehaviour {
         }
 
         Vector2 v = new Vector2(x, y).normalized * speed * speedMultiplier * Time.deltaTime;
+        Animator animator = GameObject.Find("PlayerSprite").GetComponent<Animator>();
+        if (v.magnitude == 0)
+        {
+            if (turnedLeft == false) {
+                animator.runtimeAnimatorController = idleRight;
+            }
+            else 
+            {
+                animator.runtimeAnimatorController = idleLeft;
+            }
+        }
+        else
+        {
+            if (x > 0)
+            {
+                turnedLeft = false;
+                animator.runtimeAnimatorController = runRight;
+            }
+            if (x < 0)
+            {
+                turnedLeft = true;
+                animator.runtimeAnimatorController = runLeft;
+            }
+            if (y != 0)
+            {
+                if (turnedLeft == false)
+                {
+                    animator.runtimeAnimatorController = runRight;
+                }
+                else
+                {
+                    animator.runtimeAnimatorController = runLeft;
+                }
+            }
+        }
         rb.velocity = v;
     }
 }
