@@ -3,21 +3,36 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-        startingOffset = transform.position - player.transform.position;
-
+    // Use this for initialization
+    public float interpVelocity;
+    public float minDistance;
+    public float followDistance;
+    public GameObject target;
+    public Vector3 offset;
+    public float speed;
+    Vector3 targetPos;
+    // Use this for initialization
+    void Start()
+    {
+        targetPos = transform.position;
     }
 
-    public GameObject player;
-    public float followBounds;
-    Vector3 startingOffset;
-	// Update is called once per frame
-	void Update () {
-        //if ((transform.position - startingOffset - player.transform.position).magnitude > followBounds)
-        { 
-            Vector3 newPos = Vector3.Lerp(transform.position - startingOffset, player.transform.position, 0.1f);
-            transform.position = newPos + startingOffset;
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (target)
+        {
+            Vector3 posNoZ = transform.position;
+            posNoZ.z = target.transform.position.z;
+
+            Vector3 targetDirection = (target.transform.position - posNoZ);
+
+            interpVelocity = targetDirection.magnitude * speed;
+
+            targetPos = transform.position + (targetDirection.normalized * interpVelocity * Time.deltaTime);
+
+            transform.position = Vector3.Lerp(transform.position, targetPos + offset, 0.25f);
+
         }
     }
 }
