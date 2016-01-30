@@ -59,8 +59,14 @@ public class PlayerControl2D : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        float x = -Input.GetAxis("Horizontal");
+        float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
+        print(x);
+        print(y);
+        if (x > 0.01f) x = 1.0f;
+        if (x < -0.01f) x = -1.0f;
+        if (y > 0.01f) y = 1.0f;
+        if (y < -0.01f) y = -1.0f;
         if (Input.GetButtonDown("Fire1")){ MakeConfused(2.0f); }
         if (Input.GetButtonDown("Fire2")) { MakeDrunk(2.0f); }
         if (Input.GetButtonDown("Fire3")) { MakePuke(2.0f); }
