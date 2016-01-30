@@ -52,8 +52,7 @@ public class GameplayManager : MonoBehaviour {
                     {
                         if (player.GetComponent<PlayerControl2D>().isObjectiveDone())
                         {
-                            NextLevel();
-                            ToPrepareState();
+                            ToNextLevel();
                         }
                         else
                         {
@@ -113,9 +112,18 @@ public class GameplayManager : MonoBehaviour {
         }
 
         var activation = new System.Collections.Generic.Dictionary<PlayerControl2D.Objective.Type, bool>();
+        var activeList = new System.Collections.Generic.List<PlayerControl2D.Objective.Type>();
         for (int i = 0; i < n; i++)
         {
-            activation[list[i]] = (i < 3);
+            if (i < 0)
+            {
+                activation[list[i]] = true;
+                activeList.Add(list[i]);
+            }
+            else
+            {
+                activation[list[i]] = false;
+            }
         }
 
         foreach (var ob in GameObject.FindGameObjectsWithTag("Objective"))
@@ -131,7 +139,7 @@ public class GameplayManager : MonoBehaviour {
         }
 
 
-        player.GetComponent<PlayerControl2D>().SetUpObjectives(list);
+        player.GetComponent<PlayerControl2D>().SetUpObjectives(activeList);
     }
     void ToPlayState()
     {
@@ -147,8 +155,10 @@ public class GameplayManager : MonoBehaviour {
         state = GameState.GameOver;
     }
 
-    void NextLevel()
+    public void ToNextLevel()
     {
+        ResetPlayer();
+        ToPrepareState();
         currentLevel += 1;
     }
 

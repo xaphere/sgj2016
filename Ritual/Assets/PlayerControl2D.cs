@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerControl2D : MonoBehaviour {
 
@@ -21,6 +22,10 @@ public class PlayerControl2D : MonoBehaviour {
     public float pukeIntervalMin;
     public float pukeIntervalMax;
     public float pukeLength;
+
+	public Texture2D drunk_texture;
+	public Texture2D dizzy_texture;
+	public Texture2D draifus_texture;
 
     float confusedT = 0.0f;
     float confusedLerp = 0.0f;
@@ -93,8 +98,11 @@ public class PlayerControl2D : MonoBehaviour {
             if (!objectives[i].isDone && objectives[i].objectiveType == obType)
             {
                 objectives[i].isDone = true;
-                return;
             }
+        }
+        if (isObjectiveDone())
+        {
+            GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ToNextLevel();
         }
     }
 
@@ -156,9 +164,15 @@ public class PlayerControl2D : MonoBehaviour {
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         
+		GameObject status = GameObject.Find("Canvas/status");
+		RawImage ri = status.GetComponent<RawImage> ();
+		ri.enabled = false;
 
         if (confusedT > 0.0f)
         {
+			ri.enabled = true;
+			ri.texture = dizzy_texture;
+			//status.SetActive (true);
             confusedT -= Time.deltaTime;
 
             if (confusedLerp <= 0.0f)
@@ -178,18 +192,26 @@ public class PlayerControl2D : MonoBehaviour {
                 y += Mathf.Lerp(confusedDir1.y, confusedDir2.y, confusedLerp);
             }
             Debug.DrawLine(transform.position, transform.position + new Vector3(confusedDir1.x, confusedDir1.y, 0f));
+
+
         }
 
         if (drunkT > 0.0f)
         {
-            drunkT -= Time.deltaTime;
+			ri.enabled = true;
+			ri.texture = drunk_texture;
+
+			drunkT -= Time.deltaTime;
             x *= -1;
             y *= -1;
         }
 
         if (pukeT > 0.0f)
         {
-            pukeCycle -= Time.deltaTime;
+			ri.enabled = true;
+			ri.texture = draifus_texture;
+
+			pukeCycle -= Time.deltaTime;
             if (pukeCycle <= 0.0f)
             {
                 isPuking = !isPuking;
