@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
-public class PlayerControl2D : MonoBehaviour {
+public class PlayerControl2D : MonoBehaviour
+{
 
     public RuntimeAnimatorController runLeft;
     public RuntimeAnimatorController runRight;
@@ -9,10 +11,11 @@ public class PlayerControl2D : MonoBehaviour {
     public RuntimeAnimatorController idleRight;
     private bool turnedLeft = false;  //0 is right, 1 is left.
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    // Use this for initialization
+    void Start()
+    {
+
+    }
     public float speed = 300.0f;
     public float speedMultiplier = 1.0f;
 
@@ -21,6 +24,25 @@ public class PlayerControl2D : MonoBehaviour {
     public float pukeIntervalMin;
     public float pukeIntervalMax;
     public float pukeLength;
+
+    public Texture2D drunk_texture;
+    public Texture2D dizzy_texture;
+    public Texture2D draifus_texture;
+
+    public Texture2D o_breakfast;
+    public Texture2D o_break_glass;
+    public Texture2D o_alcohol;
+    public Texture2D o_smoke;
+    public Texture2D o_milk;
+    public Texture2D o_selfie;
+    public Texture2D o_brothel;
+    public Texture2D o_medicine;
+    public Texture2D o_workout;
+    public Texture2D o_gamble;
+    public Texture2D o_zoo;
+    public Texture2D o_piss;
+    public Texture2D o_hair;
+    public Texture2D o_school;
 
     float confusedT = 0.0f;
     float confusedLerp = 0.0f;
@@ -53,14 +75,14 @@ public class PlayerControl2D : MonoBehaviour {
             hair,
             school
         }
-        
+
         public Type objectiveType;
         public bool isDone;
     }
-       
+
 
     System.Collections.Generic.List<Objective> objectives = new System.Collections.Generic.List<Objective>();
-    
+
     public System.Collections.Generic.List<Objective> GetObjectives()
     {
         return objectives;
@@ -68,33 +90,97 @@ public class PlayerControl2D : MonoBehaviour {
 
     public void SetUpObjectives(System.Collections.Generic.List<Objective.Type> list)
     {
-        objectives.Clear();
-        {
-            Objective ob = new Objective();
-            ob.objectiveType = Objective.Type.school;
-            ob.isDone = false;
-            objectives.Add(ob);
-        }
+        objectives.Clear();        
 
-        for (int i = 0; i < Mathf.Min(list.Count,3); ++i)
+        for (int i = 0; i < Mathf.Min(list.Count, 3); ++i)
         {
             Objective ob = new Objective();
             ob.objectiveType = list[i];
             ob.isDone = false;
             objectives.Add(ob);
             print(ob.objectiveType.ToString());
+
+            GameObject check = GameObject.Find("Canvas/check" + (i + 1).ToString());
+            RawImage cri = check.GetComponent<RawImage>();
+            cri.enabled = false;
+
+            GameObject objective = GameObject.Find("Canvas/objective" + (i + 1).ToString());
+            RawImage ri = objective.GetComponent<RawImage>();
+
+            Texture2D objective_texture = new Texture2D(1, 1);
+
+            switch (ob.objectiveType)
+            {
+                case Objective.Type.breakfast:
+                    objective_texture = o_breakfast;
+                    break;
+                case Objective.Type.break_glass:
+                    objective_texture = o_break_glass;
+                    break;
+                case Objective.Type.alcohol:
+                    objective_texture = o_alcohol;
+                    break;
+                case Objective.Type.smoke:
+                    objective_texture = o_smoke;
+                    break;
+                case Objective.Type.milk:
+                    objective_texture = o_milk;
+                    break;
+                case Objective.Type.selfie:
+                    objective_texture = o_selfie;
+                    break;
+                case Objective.Type.brothel:
+                    objective_texture = o_brothel;
+                    break;
+                case Objective.Type.medicine:
+                    objective_texture = o_medicine;
+                    break;
+                case Objective.Type.workout:
+                    objective_texture = o_workout;
+                    break;
+                case Objective.Type.gamble:
+                    objective_texture = o_gamble;
+                    break;
+                case Objective.Type.zoo:
+                    objective_texture = o_zoo;
+                    break;
+                case Objective.Type.piss:
+                    objective_texture = o_piss;
+                    break;
+                case Objective.Type.hair:
+                    objective_texture = o_hair;
+                    break;
+                case Objective.Type.school:
+                    objective_texture = o_school;
+                    break;
+            }
+            ri.texture = objective_texture;
+
+        }
+
+        {
+            Objective ob = new Objective();
+            ob.objectiveType = Objective.Type.school;
+            ob.isDone = false;
+            objectives.Add(ob);
         }
     }
 
     public void CompleteObjective(Objective.Type obType)
     {
-        for(int i =0; i< objectives.Count; ++i)
+        for (int i = 0; i < objectives.Count; ++i)
         {
             if (!objectives[i].isDone && objectives[i].objectiveType == obType)
             {
                 objectives[i].isDone = true;
-                return;
+                GameObject check = GameObject.Find("Canvas/check" + (i + 1).ToString());
+                RawImage cri = check.GetComponent<RawImage>();
+                cri.enabled = true;
             }
+        }
+        if (isObjectiveDone())
+        {
+            GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ToNextLevel();
         }
     }
 
@@ -139,7 +225,8 @@ public class PlayerControl2D : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         //print(x);
@@ -148,17 +235,23 @@ public class PlayerControl2D : MonoBehaviour {
         if (x < -0.01f) x = -1.0f;
         if (y > 0.01f) y = 1.0f;
         if (y < -0.01f) y = -1.0f;
-        if (Input.GetButtonDown("Fire1")){ MakeConfused(2.0f); }
+        if (Input.GetButtonDown("Fire1")) { MakeConfused(2.0f); }
         if (Input.GetButtonDown("Fire2")) { MakeDrunk(2.0f); }
         if (Input.GetButtonDown("Fire3")) { MakePuke(2.0f); }
         if (Input.GetButtonDown("Jump")) { ResetModifiers(); }
 
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        
+
+        GameObject status = GameObject.Find("Canvas/status");
+        RawImage ri = status.GetComponent<RawImage>();
+        ri.enabled = false;
 
         if (confusedT > 0.0f)
         {
+            ri.enabled = true;
+            ri.texture = dizzy_texture;
+            //status.SetActive (true);
             confusedT -= Time.deltaTime;
 
             if (confusedLerp <= 0.0f)
@@ -178,10 +271,15 @@ public class PlayerControl2D : MonoBehaviour {
                 y += Mathf.Lerp(confusedDir1.y, confusedDir2.y, confusedLerp);
             }
             Debug.DrawLine(transform.position, transform.position + new Vector3(confusedDir1.x, confusedDir1.y, 0f));
+
+
         }
 
         if (drunkT > 0.0f)
         {
+            ri.enabled = true;
+            ri.texture = drunk_texture;
+
             drunkT -= Time.deltaTime;
             x *= -1;
             y *= -1;
@@ -189,6 +287,9 @@ public class PlayerControl2D : MonoBehaviour {
 
         if (pukeT > 0.0f)
         {
+            ri.enabled = true;
+            ri.texture = draifus_texture;
+
             pukeCycle -= Time.deltaTime;
             if (pukeCycle <= 0.0f)
             {
@@ -206,10 +307,11 @@ public class PlayerControl2D : MonoBehaviour {
         Animator animator = GameObject.Find("PlayerSprite").GetComponent<Animator>();
         if (v.magnitude == 0)
         {
-            if (turnedLeft == false) {
+            if (turnedLeft == false)
+            {
                 animator.runtimeAnimatorController = idleRight;
             }
-            else 
+            else
             {
                 animator.runtimeAnimatorController = idleLeft;
             }

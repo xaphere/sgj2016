@@ -42,6 +42,7 @@ public class PlayerTriggerScript : MonoBehaviour {
 
     void ResolveTrigger(Collider2D col, bool isTrigger)
     {
+        print("AAAAAAAAAAAAAAAAAAA");
         OnTouchEffect touchEffect = col.GetComponent<OnTouchEffect>();
         if (!touchEffect)
             return;

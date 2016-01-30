@@ -19,15 +19,6 @@ public class OnTouchEffect : MonoBehaviour {
     
 	// Update is called once per frame
 	void Update () {
-	
-
-
-
-
-
-
-
-
 	}
 
     bool SetObstacleEnabled(Transform t, bool isEnabled)
@@ -44,6 +35,9 @@ public class OnTouchEffect : MonoBehaviour {
         BoxCollider2D bc = t.GetComponent<BoxCollider2D>();
         if (bc)
             bc.enabled = isEnabled;
+        ReporterScript rs = t.GetComponent<ReporterScript>();
+        if (rs)
+            rs.enabled = isEnabled;
         return (te || me || pe || bc);
     }
 
