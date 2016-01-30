@@ -23,14 +23,15 @@ public class PlayerTriggerScript : MonoBehaviour {
         ResolveTrigger(col, false);
     }
 
-    void OnCollisionEnter2D(Collider2D col)
+
+	void OnCollisionEnter2D(Collision2D col)
     {
-        ResolveTrigger(col, true);
+		ResolveTrigger(col.collider, true);
     }
 
-    void OnCollisionStay2D(Collider2D col)
+	void OnCollisionStay2D(Collision2D col)
     {
-        ResolveTrigger(col, true);
+		ResolveTrigger(col.collider, true);
     }
 
     void ResolveTrigger(Collider2D col, bool isTrigger)
