@@ -20,6 +20,14 @@ public class OnTouchEffect : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+
+
+
+
+
+
+
+
 	}
 
     bool SetObstacleEnabled(Transform t, bool isEnabled)
