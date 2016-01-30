@@ -7,15 +7,21 @@ public class MovableEnemyStart : MonoBehaviour {
     public float timeToReachTarget;
     public GameObject enemyGameObject;
     public GameObject endPosition;
+    public float t;
 
 	// Use this for initialization
 	void Start () {
-        InvokeRepeating("SpawnEnemy", 0, spawnInterval);
-	}
+        t = spawnInterval;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
+        t -= Time.deltaTime;
+	    if (t <= 0.0f)
+        {
+            t = spawnInterval;
+            SpawnEnemy();
+        }
 	}
 
     void SpawnEnemy()
@@ -23,6 +29,6 @@ public class MovableEnemyStart : MonoBehaviour {
         GameObject enemy = (GameObject)Instantiate(enemyGameObject, gameObject.transform.position, gameObject.transform.rotation);
         enemy.GetComponent<MovableEnemy>().startPosition = gameObject;
         enemy.GetComponent<MovableEnemy>().endPosition = endPosition;
-        enemy.GetComponent<MovableEnemy>().timeToReachTarget = timeToReachTarget;
+        enemy.GetComponent<MovableEnemy>().timeToReachTarget = timeToReachTarget;        
     }
 }

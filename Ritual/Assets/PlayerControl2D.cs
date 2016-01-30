@@ -44,11 +44,17 @@ public class PlayerControl2D : MonoBehaviour {
         pukeT = t;
     }
 
+    public void SetSpeedMultiplier(float v)
+    {
+        speedMultiplier = v;
+    }
+
     public void ResetModifiers()
     {
         drunkT = 0.0f;
         confusedT = 0.0f;
         pukeT = 0.0f;
+        speedMultiplier = 0.0f;
     }
 
     // Update is called once per frame
