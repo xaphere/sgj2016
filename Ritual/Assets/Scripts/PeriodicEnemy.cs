@@ -4,13 +4,13 @@ using System.Collections;
 public class PeriodicEnemy : MonoBehaviour {
 
     public float repeatRate;
-    private BoxCollider collider;
+    private BoxCollider2D collider;
     private Renderer renderer;
 
 	// Use this for initialization
 	void Start () {
         InvokeRepeating("ShowPeriodically", 0, repeatRate);
-        collider = gameObject.GetComponent<BoxCollider>();
+        collider = gameObject.GetComponent<BoxCollider2D>();
         renderer = gameObject.GetComponent<Renderer>();
 	}
 	
@@ -25,17 +25,17 @@ public class PeriodicEnemy : MonoBehaviour {
         }
 	}
 
-    void OnTriggerEnter(Collider col)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        killPlayer(col);
+        //killPlayer(col);
     }
 
-    void OnTriggerStay(Collider col)
+    void OnTriggerStay2D(Collider2D col)
     {
-        killPlayer(col);
+        //killPlayer(col);
     }
 
-    void killPlayer(Collider col)
+    void killPlayer(Collider2D col)
     {
         if (col.gameObject.tag.Equals("Player"))
         {
