@@ -42,8 +42,6 @@ public class PlayerTriggerScript : MonoBehaviour {
 
     void ResolveTrigger(Collider2D col, bool isTrigger)
     {
-        
-        print("ResolveTrigger");
         OnTouchEffect touchEffect = col.GetComponent<OnTouchEffect>();
         if (!touchEffect)
             return;
@@ -62,5 +60,7 @@ public class PlayerTriggerScript : MonoBehaviour {
             playerController.SetSpeedMultiplier(touchEffect.speedModifier);
         if (touchEffect.isKillEffect)
             GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ToGameOverState();
+        if (touchEffect.objectiveType != PlayerControl2D.Objective.Type.none)
+            playerController.CompleteObjective(touchEffect.objectiveType);
     }
 }
