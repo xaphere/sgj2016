@@ -46,19 +46,20 @@ public class GameplayManager : MonoBehaviour {
                 break;
             case GameState.Play:
                 {
+                    levelTimeleft -= Time.deltaTime;
+                    GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("countdown").GetComponent<UnityEngine.UI.Text>().text = Mathf.Ceil(levelTimeleft).ToString();
                     if (levelTimeleft <= 0.0f)
                     {
-                        if (player.GetComponent<PlayerControl2D>().isObjectiveDone)
+                        if (player.GetComponent<PlayerControl2D>().isObjectiveDone())
                         {
                             NextLevel();
                             ToPrepareState();
                         }
                         else
-                        {   
+                        {
                             ToGameOverState();
                         }
                     }
-                    levelTimeleft -= Time.deltaTime;
                 }
                 break;
             case GameState.GameOver:
@@ -84,6 +85,53 @@ public class GameplayManager : MonoBehaviour {
         timeToStart = prepareTime;
         player.GetComponent<PlayerControl2D>().SetSpeedMultiplier(0.0f);
         state = GameState.Prepare;
+
+        var list = new System.Collections.Generic.List<PlayerControl2D.Objective.Type>{
+            PlayerControl2D.Objective.Type.breakfast,
+            PlayerControl2D.Objective.Type.break_glass,
+            PlayerControl2D.Objective.Type.alcohol,
+            PlayerControl2D.Objective.Type.smoke,
+            PlayerControl2D.Objective.Type.milk,
+            PlayerControl2D.Objective.Type.selfie,
+            PlayerControl2D.Objective.Type.brothel,
+            PlayerControl2D.Objective.Type.medicine,
+            PlayerControl2D.Objective.Type.workout,
+            PlayerControl2D.Objective.Type.gamble,
+            PlayerControl2D.Objective.Type.zoo,
+            PlayerControl2D.Objective.Type.piss,
+            PlayerControl2D.Objective.Type.hair,
+        };
+       
+        int n = list.Count;
+        Random rng = new Random();
+        for (int i = 0; i < n; i++)
+        {
+            var value = list[i];
+            int r = Random.Range(i, n);
+            list[i] = list[r];
+            list[r] = value;
+        }
+
+        var activation = new System.Collections.Generic.Dictionary<PlayerControl2D.Objective.Type, bool>();
+        for (int i = 0; i < n; i++)
+        {
+            activation[list[i]] = (i < 3);
+        }
+
+        foreach (var ob in GameObject.FindGameObjectsWithTag("Objective"))
+        {
+            var te = ob.GetComponent<OnTouchEffect>();
+            if (te)
+            {
+                if (activation.ContainsKey(te.objectiveType))
+                    te.SetActive(activation[te.objectiveType]);
+                else
+                    te.SetActive(true);
+            }
+        }
+
+
+        player.GetComponent<PlayerControl2D>().SetUpObjectives(list);
     }
     void ToPlayState()
     {

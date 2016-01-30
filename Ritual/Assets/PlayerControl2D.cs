@@ -27,7 +27,80 @@ public class PlayerControl2D : MonoBehaviour {
     float pukeCycle = 0.0f;
     bool isPuking = false;
 
-    public bool isObjectiveDone { get; private set; }
+    public class Objective
+    {
+        public enum Type
+        {
+            none,
+            breakfast,
+            break_glass,
+            alcohol,
+            smoke,
+            milk,
+            selfie,
+            brothel,
+            medicine,
+            workout,
+            gamble,
+            zoo,
+            piss,
+            hair,
+            school
+        }
+        
+        public Type objectiveType;
+        public bool isDone;
+    }
+       
+
+    System.Collections.Generic.List<Objective> objectives = new System.Collections.Generic.List<Objective>();
+    
+    public System.Collections.Generic.List<Objective> GetObjectives()
+    {
+        return objectives;
+    }
+
+    public void SetUpObjectives(System.Collections.Generic.List<Objective.Type> list)
+    {
+        objectives.Clear();
+        {
+            Objective ob = new Objective();
+            ob.objectiveType = Objective.Type.school;
+            ob.isDone = false;
+            objectives.Add(ob);
+        }
+
+        for (int i = 0; i < Mathf.Min(list.Count,3); ++i)
+        {
+            Objective ob = new Objective();
+            ob.objectiveType = list[i];
+            ob.isDone = false;
+            objectives.Add(ob);
+            print(ob.objectiveType.ToString());
+        }
+    }
+
+    public void CompleteObjective(Objective.Type obType)
+    {
+        for(int i =0; i< objectives.Count; ++i)
+        {
+            if (!objectives[i].isDone && objectives[i].objectiveType == obType)
+            {
+                objectives[i].isDone = true;
+                return;
+            }
+        }
+    }
+
+    public bool isObjectiveDone()
+    {
+        foreach (Objective ob in objectives)
+        {
+            if (!ob.isDone && ob.objectiveType != Objective.Type.none)
+                return false;
+        }
+        return true;
+    }
 
     public void MakeDrunk(float t)
     {
@@ -63,8 +136,6 @@ public class PlayerControl2D : MonoBehaviour {
     void Update () {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-        print(x);
-        print(y);
         if (x > 0.01f) x = 1.0f;
         if (x < -0.01f) x = -1.0f;
         if (y > 0.01f) y = 1.0f;
@@ -124,7 +195,6 @@ public class PlayerControl2D : MonoBehaviour {
         }
 
         Vector2 v = new Vector2(x, y).normalized * speed * speedMultiplier * Time.deltaTime;
-        print(v);
         rb.velocity = v;
     }
 }
