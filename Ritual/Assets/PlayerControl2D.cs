@@ -27,6 +27,8 @@ public class PlayerControl2D : MonoBehaviour {
     float pukeCycle = 0.0f;
     bool isPuking = false;
 
+    public bool isObjectiveDone { get; private set; }
+
     public void MakeDrunk(float t)
     {
         drunkT = t;
@@ -54,12 +56,12 @@ public class PlayerControl2D : MonoBehaviour {
         drunkT = 0.0f;
         confusedT = 0.0f;
         pukeT = 0.0f;
-        speedMultiplier = 0.0f;
+        speedMultiplier = 1.0f;
     }
 
     // Update is called once per frame
     void Update () {
-        float x = -Input.GetAxis("Horizontal");
+        float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         if (Input.GetButtonDown("Fire1")){ MakeConfused(2.0f); }
         if (Input.GetButtonDown("Fire2")) { MakeDrunk(2.0f); }
@@ -115,8 +117,8 @@ public class PlayerControl2D : MonoBehaviour {
             }
         }
 
-        Vector2 v = new Vector2(x, y).normalized * speed * Time.deltaTime;
-
+        Vector2 v = new Vector2(x, y).normalized * speed * speedMultiplier * Time.deltaTime;
+        print(v);
         rb.velocity = v;
     }
 }

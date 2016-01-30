@@ -5,13 +5,20 @@ public class PlayerTriggerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-	}
+        
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    struct ColliderPair
+    {
+        public Collider2D col;
+    }
+    
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -22,8 +29,7 @@ public class PlayerTriggerScript : MonoBehaviour {
     {
         ResolveTrigger(col, false);
     }
-
-
+    
 	void OnCollisionEnter2D(Collision2D col)
     {
 		ResolveTrigger(col.collider, true);
@@ -36,6 +42,7 @@ public class PlayerTriggerScript : MonoBehaviour {
 
     void ResolveTrigger(Collider2D col, bool isTrigger)
     {
+        
         print("ResolveTrigger");
         OnTouchEffect touchEffect = col.GetComponent<OnTouchEffect>();
         if (!touchEffect)
@@ -54,6 +61,6 @@ public class PlayerTriggerScript : MonoBehaviour {
         if (touchEffect.isSpeedEffect)
             playerController.SetSpeedMultiplier(touchEffect.speedModifier);
         if (touchEffect.isKillEffect)
-            GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ResetGame();
+            GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ToGameOverState();
     }
 }
