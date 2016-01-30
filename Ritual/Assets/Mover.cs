@@ -10,24 +10,37 @@ public class Mover : MonoBehaviour {
 
     public float speed;
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update() {
         float x = -Input.GetAxis("Vertical");
         float z = Input.GetAxis("Horizontal");
-        Vector3 dir = new Vector3(x, 0.0f, z);
+        Vector3 dir = new Vector3(x, 0.0f, z).normalized;
         Vector3 moveVec = dir * speed;
 
-        print(x);
-        print(z);
+        GetComponent<Rigidbody>().AddForce(moveVec*100.0f);
 
+        /*
         Rigidbody rb = GetComponent<Rigidbody>();
         RaycastHit hitInfo;
-        if (rb.SweepTest(dir, out hitInfo, moveVec.magnitude*2.0f))
+        if (rb.SweepTest(new Vector3(moveVec.x, 0.0f, moveVec.z), out hitInfo, moveVec.magnitude))
         {
-            //moveVec *= moveVec.magnitude / hitInfo.distance;
-            moveVec *= 0.0f;
-            print("AAAAA");
+            if (rb.SweepTest(new Vector3(moveVec.x, 0.0f, 0.0f), out hitInfo, moveVec.magnitude))
+            {
+                print("A");
+                moveVec.x *= 0.0f;
+                moveVec.z *= 0.5f;
+            }
+            if (rb.SweepTest(new Vector3(0.0f, 0.0f, moveVec.z), out hitInfo, moveVec.magnitude))
+            {
+                print("B");
+                print(hitInfo.distance);
+                moveVec.x *= 0.5f;
+                moveVec.z *= 0.0f;
+            }
         }
+        
+
         transform.position += moveVec;
+        */
     }
 }
