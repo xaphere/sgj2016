@@ -177,6 +177,7 @@ public class GameplayManager : MonoBehaviour {
 
     public void ToGameOverState()
     {
+		return;
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("countdown").GetComponent<UnityEngine.UI.Text>().text = "GAME OVER";
         player.GetComponent<PlayerControl2D>().SetSpeedMultiplier(0.0f);
         state = GameState.GameOver;
