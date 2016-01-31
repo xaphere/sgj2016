@@ -24,11 +24,15 @@ public class GameplayManager : MonoBehaviour {
 
     private bool is_next_leveling = false;
 
+
+	private string[] weekDays = {"Monday","Tuesday","Wednesday", "Thursday", "Friday" };
     // Use this for initialization
     void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
-
-        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("days").GetComponent<UnityEngine.UI.Text>().text = "Day: " + (currentLevel+1).ToString();
+		string dayString = weekDays[(currentLevel)%5];
+		Debug.Log (dayString);
+		dayString += ", Day: " + (currentLevel+1).ToString();
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("days").GetComponent<UnityEngine.UI.Text>().text = dayString;
 
         ResetGame();
 	}
@@ -204,7 +208,10 @@ public class GameplayManager : MonoBehaviour {
 {
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("next").GetComponent<UnityEngine.UI.RawImage>().enabled = true;
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = true;
-        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().text = "DAY " + (currentLevel + 1).ToString() ;
+		string dayString = weekDays[(currentLevel)%5];
+		Debug.Log (dayString);
+		dayString += ", Day: " + (currentLevel+1).ToString();
+		GameObject.FindGameObjectWithTag ("UI/Canvas").transform.FindChild ("nextday").GetComponent<UnityEngine.UI.Text> ().text = dayString;
 
         yield return new WaitForSeconds(2);
 
