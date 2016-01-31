@@ -28,6 +28,8 @@ public class PlayerControl2D : MonoBehaviour
     public Texture2D drunk_texture;
     public Texture2D dizzy_texture;
     public Texture2D draifus_texture;
+    public Texture2D speedup_texture;
+    public Texture2D speeddown_texture;
 
     public Texture2D o_breakfast;
     public Texture2D o_break_glass;
@@ -44,6 +46,8 @@ public class PlayerControl2D : MonoBehaviour
     public Texture2D o_hair;
     public Texture2D o_school;
     public Texture2D o_church;
+
+    public GameObject pukeObject;
 
     float confusedT = 0.0f;
     float confusedLerp = 0.0f;
@@ -92,7 +96,7 @@ public class PlayerControl2D : MonoBehaviour
 
     public void SetUpObjectives(System.Collections.Generic.List<Objective.Type> list)
     {
-        objectives.Clear();        
+        objectives.Clear();
 
         for (int i = 0; i < Mathf.Min(list.Count, 3); ++i)
         {
@@ -278,7 +282,7 @@ public class PlayerControl2D : MonoBehaviour
                 x += Mathf.Lerp(confusedDir1.x, confusedDir2.x, confusedLerp);
                 y += Mathf.Lerp(confusedDir1.y, confusedDir2.y, confusedLerp);
             }
-            Debug.DrawLine(transform.position, transform.position + new Vector3(confusedDir1.x, confusedDir1.y, 0f));
+            //Debug.DrawLine(transform.position, transform.position + new Vector3(confusedDir1.x, confusedDir1.y, 0f));
 
 
         }
@@ -302,6 +306,8 @@ public class PlayerControl2D : MonoBehaviour
             if (pukeCycle <= 0.0f)
             {
                 isPuking = !isPuking;
+                if (isPuking)
+                    Instantiate(pukeObject, transform.position, transform.rotation);
                 pukeCycle = isPuking ? pukeLength : Random.Range(pukeIntervalMin, pukeIntervalMax);
             }
             if (isPuking)
@@ -309,6 +315,12 @@ public class PlayerControl2D : MonoBehaviour
                 x *= 0.0f;
                 y *= 0.0f;
             }
+        }
+
+        if (speedMultiplier > 0.0f && Mathf.Abs(1.0f - speedMultiplier) > 0.1f )
+        {
+            ri.enabled = true;
+            ri.texture = (speedMultiplier >= 1.0f) ? speedup_texture : speeddown_texture;
         }
 
         Vector2 v = new Vector2(x, y).normalized * speed * speedMultiplier * Time.deltaTime;

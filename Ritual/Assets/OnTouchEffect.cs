@@ -24,18 +24,20 @@ public class OnTouchEffect : MonoBehaviour {
     bool SetObstacleEnabled(Transform t, bool isEnabled)
     {
         OnTouchEffect te = t.GetComponent<OnTouchEffect>();
-        if (te)
-            te.enabled = isEnabled;
+        //if (te)
+        //    te.enabled = isEnabled;
         MovableEnemyStart me = t.GetComponent<MovableEnemyStart>();
-        if (me)
-            me.enabled = isEnabled;
+        //if (me)
+        //    me.enabled = isEnabled;
         PeriodicEnemy pe = t.GetComponent<PeriodicEnemy>();
-        if (pe)
-            pe.enabled = isEnabled;
+        //if (pe)
+        //    pe.enabled = isEnabled;
         BoxCollider2D bc = t.GetComponent<BoxCollider2D>();
-        if (bc)
-            bc.enabled = isEnabled;
-        return (te || me || pe || bc);
+        //if (bc)
+        //    bc.enabled = isEnabled;
+        
+        t.gameObject.SetActive(isEnabled);
+        return true;//(te || me || pe || bc);
     }
 
     public void SetActive(bool isActive)
@@ -48,6 +50,7 @@ public class OnTouchEffect : MonoBehaviour {
             if (SetObstacleEnabled(child, false))
                 validChildren.Add(child);
         }
+        print(validChildren.Count.ToString() + " " + isActive.ToString());
         //if (validChildren.Count > 0 && isActive)
         //{
         //    SetObstacleEnabled(validChildren[Random.Range(0, validChildren.Count)], true);
@@ -59,5 +62,6 @@ public class OnTouchEffect : MonoBehaviour {
                 SetObstacleEnabled(ch, true);
             }
         }
+        enabled = isActive;
     }
 }

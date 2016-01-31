@@ -44,9 +44,9 @@ public class PlayerTriggerScript : MonoBehaviour {
     {
         print("AAAAAAAAAAAAAAAAAAA");
         OnTouchEffect touchEffect = col.GetComponent<OnTouchEffect>();
-        if (!touchEffect)
+        if (!touchEffect || !touchEffect.enabled)
             return;
-
+        print("BBBBBBBBBBBBBBBBB" + touchEffect.isKillEffect.ToString());
         PlayerControl2D playerController = GetComponent<PlayerControl2D>();
 
         if (touchEffect.shouldResetEffects)
