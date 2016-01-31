@@ -22,9 +22,14 @@ public class GameplayManager : MonoBehaviour {
     public GameObject textPrefab;
     GameObject player;
 
+    private bool is_next_leveling = false;
+
     // Use this for initialization
     void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
+
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("days").GetComponent<UnityEngine.UI.Text>().text = "Day: " + (currentLevel+1).ToString();
+
         ResetGame();
 	}
     
@@ -48,7 +53,7 @@ public class GameplayManager : MonoBehaviour {
                 {
                     levelTimeleft -= Time.deltaTime;
                     GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("countdown").GetComponent<UnityEngine.UI.Text>().text = Mathf.Ceil(levelTimeleft).ToString();
-                    if (levelTimeleft <= 0.0f)
+                    if (levelTimeleft <= 0.0f && !is_next_leveling)
                     {
                         if (player.GetComponent<PlayerControl2D>().isObjectiveDone())
                         {
@@ -81,7 +86,7 @@ public class GameplayManager : MonoBehaviour {
 
     void ToPrepareState()
     {
-        timeToStart = prepareTime;
+        timeToStart = prepareTime + 5;
         player.GetComponent<PlayerControl2D>().SetSpeedMultiplier(0.0f);
         state = GameState.Prepare;
 
@@ -99,6 +104,7 @@ public class GameplayManager : MonoBehaviour {
             PlayerControl2D.Objective.Type.zoo,
             PlayerControl2D.Objective.Type.piss,
             PlayerControl2D.Objective.Type.hair,
+            PlayerControl2D.Objective.Type.sect
         };
        
         int n = list.Count;
@@ -115,7 +121,7 @@ public class GameplayManager : MonoBehaviour {
         var activeList = new System.Collections.Generic.List<PlayerControl2D.Objective.Type>();
         for (int i = 0; i < n; i++)
         {
-            if (i < 3)
+            if (i < 15)
             {
                 activation[list[i]] = true;
                 activeList.Add(list[i]);
@@ -134,8 +140,25 @@ public class GameplayManager : MonoBehaviour {
                 if (activation.ContainsKey(te.objectiveType))
                     te.SetActive(activation[te.objectiveType]);
                 else
+                {
+                    print("cccccc");
+                    print(ob.name);
                     te.SetActive(true);
+                }
+                if (activation.ContainsKey(te.objectiveType))
+                {
+                    ReporterScript rs = ob.GetComponent<ReporterScript>();
+                    if (rs)
+                        rs.enabled = activation[te.objectiveType];
+                }
+                else
+                {
+                    ReporterScript rs = ob.GetComponent<ReporterScript>();
+                    if (rs)
+                        rs.enabled = true;
+                }
             }
+            
         }
 
 
@@ -157,17 +180,43 @@ public class GameplayManager : MonoBehaviour {
 
     public void ToNextLevel()
     {
+        is_next_leveling = true;
+
+        currentLevel += 1;
+
+        StartCoroutine(MyCoroutine());
+
         ResetPlayer();
         ToPrepareState();
-        currentLevel += 1;
+        
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("days").GetComponent<UnityEngine.UI.Text>().text = "Day: " + (currentLevel + 1).ToString();
+        is_next_leveling = false;
     }
 
-    public void ResetGame()
+     
+
+
+ IEnumerator MyCoroutine()
+{
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("next").GetComponent<UnityEngine.UI.RawImage>().enabled = true;
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = true;
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().text = "DAY " + (currentLevel + 1).ToString() ;
+
+        yield return new WaitForSeconds(5);
+
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("next").GetComponent<UnityEngine.UI.RawImage>().enabled = false;
+        GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = false;
+
+
+    }
+
+public void ResetGame()
     {
         print("Starting game");
+        currentLevel = 0;
+        StartCoroutine(MyCoroutine());
         ResetPlayer();
         ToPrepareState();
-        currentLevel = 0;
     }
     
 }

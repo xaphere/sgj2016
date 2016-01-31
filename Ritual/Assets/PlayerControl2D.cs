@@ -43,6 +43,7 @@ public class PlayerControl2D : MonoBehaviour
     public Texture2D o_piss;
     public Texture2D o_hair;
     public Texture2D o_school;
+    public Texture2D o_church;
 
     float confusedT = 0.0f;
     float confusedLerp = 0.0f;
@@ -73,6 +74,7 @@ public class PlayerControl2D : MonoBehaviour
             zoo,
             piss,
             hair,
+            sect,
             school
         }
 
@@ -100,7 +102,7 @@ public class PlayerControl2D : MonoBehaviour
             objectives.Add(ob);
             print(ob.objectiveType.ToString());
 
-            GameObject check = GameObject.Find("Canvas/check" + (i + 1).ToString());
+            GameObject check = GameObject.Find("Canvas/objective" + (i + 1).ToString() + "/check" + (i + 1).ToString());
             RawImage cri = check.GetComponent<RawImage>();
             cri.enabled = false;
 
@@ -153,6 +155,9 @@ public class PlayerControl2D : MonoBehaviour
                 case Objective.Type.school:
                     objective_texture = o_school;
                     break;
+                case Objective.Type.sect:
+                    objective_texture = o_church;
+                    break;
             }
             ri.texture = objective_texture;
 
@@ -173,12 +178,15 @@ public class PlayerControl2D : MonoBehaviour
             if (!objectives[i].isDone && objectives[i].objectiveType == obType)
             {
                 objectives[i].isDone = true;
-                GameObject check = GameObject.Find("Canvas/check" + (i + 1).ToString());
-                RawImage cri = check.GetComponent<RawImage>();
-                cri.enabled = true;
+                if (i < 3)
+                {
+                    GameObject check = GameObject.Find("Canvas/objective" + (i + 1).ToString() + "/check" + (i + 1).ToString());
+                    RawImage cri = check.GetComponent<RawImage>();
+                    cri.enabled = true;
+                }
             }
         }
-        if (isObjectiveDone())
+        if (isObjectiveDone() && obType == Objective.Type.school)
         {
             GameObject.FindGameObjectWithTag("GM").GetComponent<GameplayManager>().ToNextLevel();
         }

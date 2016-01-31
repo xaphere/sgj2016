@@ -26,7 +26,7 @@ public class MovableEnemyStart : MonoBehaviour {
 
     void SpawnEnemy()
     {
-        GameObject enemy = (GameObject)Instantiate(enemyGameObject, gameObject.transform.position, gameObject.transform.rotation);
+        GameObject enemy = (GameObject)Instantiate(enemyGameObject, gameObject.transform.position, enemyGameObject.transform.rotation);
         enemy.GetComponent<MovableEnemy>().startPosition = gameObject;
         enemy.GetComponent<MovableEnemy>().endPosition = endPosition;
         enemy.GetComponent<MovableEnemy>().timeToReachTarget = timeToReachTarget;        

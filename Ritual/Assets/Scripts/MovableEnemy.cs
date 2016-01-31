@@ -15,12 +15,15 @@ public class MovableEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        t += Time.deltaTime / timeToReachTarget;
-        transform.position = Vector3.Lerp(startPosition.transform.position, endPosition.transform.position, t);
-
-        if (Vector3.Distance(gameObject.transform.position, endPosition.transform.position) < 0.1)
+        if (startPosition && endPosition)
         {
-            Destroy(gameObject);
+            t += Time.deltaTime / timeToReachTarget;
+            transform.position = Vector3.Lerp(startPosition.transform.position, endPosition.transform.position, t);
+
+            if (Vector3.Distance(gameObject.transform.position, endPosition.transform.position) < 0.1)
+            {
+                Destroy(gameObject);
+            }
         }
 	}
 }

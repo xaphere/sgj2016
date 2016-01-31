@@ -32,7 +32,11 @@ public class ReporterScript : MonoBehaviour {
 		prompt.transform.SetParent (uiCanvas.transform);
 		prompt.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-200.0f, 50.0f);
 		StartCoroutine (RemovePrompt (3, prompt));
-	}
+
+        ReporterScript rs = this.GetComponent<ReporterScript>();
+        if (rs)
+            rs.enabled = false;
+    }
 
 	IEnumerator RemovePrompt(int sec, GameObject prompt) {
 		yield return new WaitForSeconds (sec);
@@ -40,6 +44,9 @@ public class ReporterScript : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
+        if (!enabled)
+            return;
+
 		if (other.gameObject.tag == "Player") {
 			if (Time.time > nextTrigger) {
 				nextTrigger = Time.time + triggerRate;

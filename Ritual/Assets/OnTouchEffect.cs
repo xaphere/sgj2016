@@ -35,9 +35,6 @@ public class OnTouchEffect : MonoBehaviour {
         BoxCollider2D bc = t.GetComponent<BoxCollider2D>();
         if (bc)
             bc.enabled = isEnabled;
-        ReporterScript rs = t.GetComponent<ReporterScript>();
-        if (rs)
-            rs.enabled = isEnabled;
         return (te || me || pe || bc);
     }
 
@@ -51,9 +48,16 @@ public class OnTouchEffect : MonoBehaviour {
             if (SetObstacleEnabled(child, false))
                 validChildren.Add(child);
         }
-        if (validChildren.Count > 0)
+        //if (validChildren.Count > 0 && isActive)
+        //{
+        //    SetObstacleEnabled(validChildren[Random.Range(0, validChildren.Count)], true);
+        //}
+        if (isActive)
         {
-            SetObstacleEnabled(validChildren[Random.Range(0, validChildren.Count)], true);
+            foreach (var ch in validChildren)
+            {
+                SetObstacleEnabled(ch, true);
+            }
         }
     }
 }
