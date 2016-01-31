@@ -82,11 +82,12 @@ public class GameplayManager : MonoBehaviour {
     public void ResetPlayer()
     {
         player.transform.position = playerStart;
+        player.GetComponent<PlayerControl2D>().ResetModifiers();
     }
 
     void ToPrepareState()
     {
-        timeToStart = prepareTime + 5;
+        timeToStart = prepareTime + 2;
         player.GetComponent<PlayerControl2D>().SetSpeedMultiplier(0.0f);
         state = GameState.Prepare;
 
@@ -122,6 +123,7 @@ public class GameplayManager : MonoBehaviour {
         for (int i = 0; i < n; i++)
         {
             if (i < 15)
+            //if (i < 3)
             {
                 activation[list[i]] = true;
                 activeList.Add(list[i]);
@@ -131,6 +133,8 @@ public class GameplayManager : MonoBehaviour {
                 activation[list[i]] = false;
             }
         }
+        //activation[PlayerControl2D.Objective.Type.breakfast] = true;
+        //activeList.Add(PlayerControl2D.Objective.Type.breakfast);
 
         foreach (var ob in GameObject.FindGameObjectsWithTag("Objective"))
         {
@@ -202,7 +206,7 @@ public class GameplayManager : MonoBehaviour {
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = true;
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().text = "DAY " + (currentLevel + 1).ToString() ;
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
 
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("next").GetComponent<UnityEngine.UI.RawImage>().enabled = false;
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = false;

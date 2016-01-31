@@ -16,13 +16,13 @@ public class PeriodicEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (collider.enabled) {
-            renderer.material.color = Color.red;
-        }
-        else
-        {
-            renderer.material.color = Color.green;
-        }
+        //if (collider.enabled) {
+        //    renderer.material.color = Color.red;
+        //}
+        //else
+        //{
+        //    renderer.material.color = Color.green;
+        //}
 	}
 
     void OnTriggerEnter2D(Collider2D col)
@@ -47,6 +47,10 @@ public class PeriodicEnemy : MonoBehaviour {
     void ShowPeriodically()
     {
         collider.enabled = !collider.enabled;
+        GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+        var te = GetComponent<OnTouchEffect>();
+        if (te)
+            te.enabled = !te.enabled;
     }
 
 }
