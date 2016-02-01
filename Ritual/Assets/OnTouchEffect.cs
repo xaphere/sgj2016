@@ -51,17 +51,17 @@ public class OnTouchEffect : MonoBehaviour {
                 validChildren.Add(child);
         }
         print(validChildren.Count.ToString() + " " + isActive.ToString());
-        //if (validChildren.Count > 0 && isActive)
-        //{
-        //    SetObstacleEnabled(validChildren[Random.Range(0, validChildren.Count)], true);
-        //}
-        if (isActive)
+        if (validChildren.Count > 0 && isActive)
         {
-            foreach (var ch in validChildren)
-            {
-                SetObstacleEnabled(ch, true);
-            }
+            SetObstacleEnabled(validChildren[Random.Range(0, validChildren.Count)], true);
         }
+        //if (isActive)
+        //{
+        //    foreach (var ch in validChildren)
+        //    {
+        //        SetObstacleEnabled(ch, true);
+        //    }
+        //}
         enabled = isActive;
     }
 }

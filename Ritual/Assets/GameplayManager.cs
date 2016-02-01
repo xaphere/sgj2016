@@ -21,13 +21,15 @@ public class GameplayManager : MonoBehaviour {
     public Vector3 playerStart;
     public GameObject textPrefab;
     GameObject player;
-
+    AudioSource gay;
     private bool is_next_leveling = false;
 
 
 	private string[] weekDays = {"Monday","Tuesday","Wednesday", "Thursday", "Friday" };
     // Use this for initialization
     void Start () {
+        gay = GetComponent<AudioSource>();
+
         player = GameObject.FindGameObjectWithTag("Player");
 		string dayString = weekDays[(currentLevel)%5];
 		Debug.Log (dayString);
@@ -126,8 +128,8 @@ public class GameplayManager : MonoBehaviour {
         var activeList = new System.Collections.Generic.List<PlayerControl2D.Objective.Type>();
         for (int i = 0; i < n; i++)
         {
-            if (i < 15)
-            //if (i < 3)
+            //if (i < 15)
+            if (i < 3)
             {
                 activation[list[i]] = true;
                 activeList.Add(list[i]);
@@ -181,7 +183,9 @@ public class GameplayManager : MonoBehaviour {
 
     public void ToGameOverState()
     {
-		return;
+        if (state == GameState.GameOver)
+            return;
+        gay.Play();
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("countdown").GetComponent<UnityEngine.UI.Text>().text = "GAME OVER";
         player.GetComponent<PlayerControl2D>().SetSpeedMultiplier(0.0f);
         state = GameState.GameOver;
@@ -214,8 +218,10 @@ public class GameplayManager : MonoBehaviour {
 		dayString += ", Day: " + (currentLevel+1).ToString();
 		GameObject.FindGameObjectWithTag ("UI/Canvas").transform.FindChild ("nextday").GetComponent<UnityEngine.UI.Text> ().text = dayString;
 
-        yield return new WaitForSeconds(2);
-
+        if (currentLevel == 0)
+            yield return new WaitForSeconds(7);
+        else
+            yield return new WaitForSeconds(2);
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("next").GetComponent<UnityEngine.UI.RawImage>().enabled = false;
         GameObject.FindGameObjectWithTag("UI/Canvas").transform.FindChild("nextday").GetComponent<UnityEngine.UI.Text>().enabled = false;
 

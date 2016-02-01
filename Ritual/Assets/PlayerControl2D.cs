@@ -247,9 +247,9 @@ public class PlayerControl2D : MonoBehaviour
         if (x < -0.01f) x = -1.0f;
         if (y > 0.01f) y = 1.0f;
         if (y < -0.01f) y = -1.0f;
-        if (Input.GetButtonDown("Fire1")) { MakeConfused(2.0f); }
-        if (Input.GetButtonDown("Fire2")) { MakeDrunk(2.0f); }
-        if (Input.GetButtonDown("Fire3")) { MakePuke(2.0f); }
+        //if (Input.GetButtonDown("Fire1")) { MakeConfused(2.0f); }
+        //if (Input.GetButtonDown("Fire2")) { MakeDrunk(2.0f); }
+        //if (Input.GetButtonDown("Fire3")) { MakePuke(2.0f); }
         if (Input.GetButtonDown("Jump")) { ResetModifiers(); }
 
 

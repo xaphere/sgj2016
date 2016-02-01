@@ -31,7 +31,7 @@ public class ReporterScript : MonoBehaviour {
 		prompt.transform.FindChild ("Text").GetComponent<Text> ().text = promptText;
 		prompt.transform.SetParent (uiCanvas.transform);
 		prompt.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-200.0f, 50.0f);
-		StartCoroutine (RemovePrompt (3, prompt));
+		StartCoroutine (RemovePrompt (5, prompt));
 
         ReporterScript rs = this.GetComponent<ReporterScript>();
         if (rs)
