@@ -11,7 +11,10 @@ The premise is that Gray is trying to complete 3 of his daily rituals before he 
 Created with Unity3d Engine
 
 ####Links
+[Play](http://xaphere.github.io/games/Ritual/)
 
 [Game Page](http://globalgamejam.org/2016/games/principle-grey)
+
 [Sounds](http://freesound.org/)
+
 [Music](https://www.youtube.com/watch?v=MF6JvbfYI-8)
